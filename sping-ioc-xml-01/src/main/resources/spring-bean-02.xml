@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--构造参数传值di的配置
+        value = 直接属性值
+        ref = 引用其他的bean beanId值-->
+
+    <!--引用和被引用的组件，必须全部在ioc容器-->
+    <bean id = "userDao" class = "com.atguigu.ioc_02.UserDao"/>
+    <!--1. 单个构造参数注入-->
+    <bean id = "userService" class = "com.atguigu.ioc_02.UserService">
+        <constructor-arg ref = "userDao"/>
+    </bean>
+    <!--springioc容器是一个高级容器，内部会有缓存动作!现创建对象[ioc]，再进行属性赋值[di]-->
+
+    <!--步骤1：将他们都存放在ioc容器[ioc]-->
+
+    <!--2.多个构造参数注入,三种方案-->
+    <!--2.1最佳方案，按相应构造函数的角标注入数据-->
+    <bean id = "userDao" class = "com.atguigu.ioc_02.UserDao"/>
+
+    <bean id = "userService2" class = "com.atguigu.ioc_02.UserService2">
+        <constructor-arg index="0" value="18"/>
+        <constructor-arg index="1" value="二狗子"/>
+        <constructor-arg index="2" ref="userDao"/>
+    </bean>
+
+    <!--2.2按照相应构造函数的名称注入数据，不必按顺序-->
+    <bean id = "userDao" class = "com.atguigu.ioc_02.UserDao"/>
+    <bean id = "userService2" class = "com.atguigu.ioc_02.UserService2">
+        <constructor-arg name="age" value="18"/>
+        <constructor-arg name="name" value="二狗子"/>
+        <constructor-arg name="userDao" ref="userDao"/>
+    </bean>
+
+    <!--2.3直接注入，必须按顺序-->
+    <bean id = "userDao" class = "com.atguigu.ioc_02.UserDao"/>
+    <bean id = "userService2" class = "com.atguigu.ioc_02.UserService2">
+        <constructor-arg value="18"/>
+        <constructor-arg value="二狗子"/>
+        <constructor-arg ref="userDao"/>
+    </bean>
+    <!--3.触发setter方法进行注入-->
+    <bean id="simpleMovieLister" class="com.atguigu.ioc_02.SimpleMovieLister">
+        <property name="movieFinder" ref="movieFinder"/>
+        <property name="movieName" value="movieName"/>
+    </bean>
+    <bean id="movieFinder" class="com.atguigu.ioc_02.MovieFinder"/>
+</beans>
